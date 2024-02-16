@@ -33,5 +33,5 @@ fsa12.verify(func=lambda x: x.count('0') % 2 or x.count('1') % 2 == 0, max_depth
 
 fsa12 = fsa.operate(fsa2,'and')
 fsa12.verify(func=lambda x: x.count('0') % 2 and x.count('1') % 2 == 0, max_depth=5)
-
+fsa12.render()
 

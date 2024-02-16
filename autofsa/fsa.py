@@ -110,7 +110,7 @@ class FSA:
         assert len(self.end_nodes) != 0, "No end nodes provided in FSA!"
 
         dot = graphviz.Digraph(comment=self.name, graph_attr=GRAPH_PARAMS)
-        [dot.node(node.name, node.name, DEFAULT_NODE) for node in self.nodes if node.status == '-']
+        [dot.node(node.name, node.name, DEFAULT_NODE) for node in self.nodes if node.status == 'NONE']
         [dot.node(node.name, node.name, START_NODE) for node in self.nodes if node.status == 'START']
         [dot.node(node.name, node.name, END_NODE) for node in self.nodes if node.status == 'END']
 
@@ -135,7 +135,7 @@ class FSA:
         }
         assert operation in OPERATIONS.keys(), "This operation don't supported!"
 
-        new_fsa = FSA(f'[{self.name}]or[{other.name}]', self.language)
+        new_fsa = FSA(f'[{self.name}]{operation}[{other.name}]', self.language)
         for n1 in self.nodes:
             for n2 in other.nodes:
                 name1 = n1.name
