@@ -193,3 +193,7 @@ class FSA:
             print(f"{self.name} was successfully verified {tests_failed}/{tests} tests were failed!")
         else:
             print(f"Verification of {self.name} was not successful {tests_failed}/{tests} tests were failed!")
+
+    def make_complete(self, trash):
+        for node in self.nodes:
+            self.edge_between(node, trash, self.language - node.contains)
