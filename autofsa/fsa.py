@@ -3,6 +3,7 @@ from typing import Iterator
 from .node import Node
 from .edge import Edge
 import graphviz
+from itertools import product
 
 from .render_config import GRAPH_PARAMS, DEFAULT_NODE, START_NODE, END_NODE
 
@@ -134,7 +135,7 @@ class FSA:
         }
         assert operation in OPERATIONS.keys(), "This operation don't supported!"
 
-        new_fsa = FSA(f'{self.name}or{other.name}', self.language)
+        new_fsa = FSA(f'[{self.name}]or[{other.name}]', self.language)
         for n1 in self.nodes:
             for n2 in other.nodes:
                 name1 = n1.name
@@ -152,7 +153,43 @@ class FSA:
         new_fsa.set_start(new_start_node)
         for n1 in self.nodes:
             for n2 in other.nodes:
-                node = new_fsa.get_node(n1.name+n2.name)
+                node = new_fsa.get_node(n1.name + n2.name)
                 if OPERATIONS[operation](n1 in self.end_nodes, n2 in other.end_nodes):
                     new_fsa.add_ends(node)
         return new_fsa
+
+    def trace(self, sentence: str) -> bool:
+        curr = self.start
+        p = 0
+        while p < len(sentence):
+            l = sentence[p]
+            next_node = self.get_node(curr.dirs[l])
+            curr = next_node
+            p += 1
+        return curr.status == "END"
+
+    def verify(self,
+               func,  # sentence -> bool if it is correct
+               max_depth,
+               min_depth: int = 1,
+               ) -> None:
+        assert self.isComplete, "To perform verification of FSA should be complete!"
+        assert self.start is not None, "Start node must be set in FSA!"
+        assert len(self.end_nodes) != 0, "No end nodes provided in FSA!"
+        verification_lang = self.language
+        tests, tests_failed = 0, 0
+        verified = True
+        for sub_depth in range(min_depth, max_depth + 1):
+            for sentence in product(verification_lang, repeat=sub_depth):
+                sentence = ''.join(sentence)
+                if self.trace(sentence) != func(sentence):
+                    fsa_ans = 'V' if self.trace(sentence) else 'X'
+                    func_ans = 'V' if func(sentence) else 'X'
+                    print(f"FSA Wrong Answer! testcase: {sentence} -> FSA: {fsa_ans}, FUNC:{func_ans}")
+                    verified = False
+                    tests_failed += 1
+                tests += 1
+        if verified:
+            print(f"{self.name} was successfully verified {tests_failed}/{tests} tests were failed!")
+        else:
+            print(f"Verification of {self.name} was not successful {tests_failed}/{tests} tests were failed!")
