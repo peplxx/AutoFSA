@@ -166,7 +166,7 @@ class FSA:
             next_node = self.get_node(curr.dirs[l])
             curr = next_node
             p += 1
-        return curr.status == "END"
+        return curr in self.end_nodes
 
     def verify(self,
                func,  # sentence -> bool if it is correct
