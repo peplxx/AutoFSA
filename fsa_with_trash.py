@@ -1,4 +1,4 @@
-from autofsa.fsa import FSA
+from autofsa import FSA
 
 lang = {"w", "t", 'a', 'l', 'k', 'e', 'd'}
 

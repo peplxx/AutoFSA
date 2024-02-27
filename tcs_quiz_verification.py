@@ -1,4 +1,4 @@
-from autofsa.fsa import FSA
+from autofsa import FSA
 
 
 def check_divisible(string: str):
@@ -24,3 +24,4 @@ fsa.edge_between(q2, q2, {'1'})
 fsa.add_ends(q0)
 
 fsa.verify(check_divisible, max_depth=7)
+fsa.render()

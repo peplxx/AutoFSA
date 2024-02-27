@@ -1,4 +1,4 @@
-from autofsa.fsa import FSA
+from autofsa import FSA
 from collections import Counter
 
 fsa = FSA("even_letters", {'a', 'b'}, sub_name='p')

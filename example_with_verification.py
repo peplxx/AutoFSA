@@ -1,4 +1,4 @@
-from autofsa.fsa import FSA
+from autofsa import FSA
 
 fsa = FSA(name='fsa1',
           sub_name='q',
